@@ -26,9 +26,11 @@ minio:
   secretKey: minioadmin #访问的秘钥
 
 logging:
+  file:
+    path: /var/logs
   level:
     root: info
-    com.macro.mall: debug
+    com.macro.mall: info
 
 logstash:
   host: localhost

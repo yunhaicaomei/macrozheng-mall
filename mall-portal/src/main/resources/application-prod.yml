@@ -58,3 +58,8 @@ alipay:
   returnUrl: http://192.168.3.101:8060/#/pages/money/paySuccess
   notifyUrl:
 
+nihaopay:
+  api: https://apitest.nihaopay.com/v1.2/transactions/securepay
+  token: 6c4dc4828474fa73c5f438a9eb2fbf3092e441d9f2ea5fbcf93b51a232ddc249
+  ipn_url: http://218.90.154.14:14019/order/paySuccess
+  callback_url: http://218.90.154.14:14018/pages/money/paySuccess

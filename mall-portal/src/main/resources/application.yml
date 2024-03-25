@@ -37,6 +37,7 @@ secure:
       - /product/**
       - /brand/**
       - /alipay/**
+      - /nihaopay/**
 
 # 自定义redis key
 redis:
