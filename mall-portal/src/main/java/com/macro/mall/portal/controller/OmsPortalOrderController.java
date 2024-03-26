@@ -100,7 +100,7 @@ public class OmsPortalOrderController {
         String callback_url = "http://218.90.154.14:14018/pages/money/paySuccess";
 
         String amount = orderDetail.getTotalAmount().setScale(0).toString();
-        amount = "1";
+//        amount = "1";
         String reference = vendor+"_"+ orderDetail.getId().toString();
         reference = vendor+"_"+ orderDetail.getOrderSn();
 //        reference = SecureUtil.aes(SymmetricAlgorithm.AES.getValue().getBytes()).encryptHex(reference);

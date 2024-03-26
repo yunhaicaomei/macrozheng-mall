@@ -215,3 +215,11 @@ Copyright (c) 2018-2024 macrozheng
 
 ## 编译
 mvn clean package
+
+## mysql
+
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('4rVXgKMdXiWEqRZV');
+
+ALTER USER 'username'@'host' IDENTIFIED BY 'new_password';
+FLUSH PRIVILEGES;
