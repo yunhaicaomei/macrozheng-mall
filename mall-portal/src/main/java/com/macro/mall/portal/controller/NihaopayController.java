@@ -106,8 +106,66 @@ public class NihaopayController {
     }
 
 
+    @RequestMapping(value = "/nihaopayCallback")
+    public String nihaopayCallback(HttpServletRequest request) {
+        try {
+            logger.info("callback request:");
+            logger.info(getClientInfo(request));
+
+            Map<String, String[]> params = request.getParameterMap();
+            if (params.size() < 1) {
+                return "redirect:/"+this.nihaopayConfig.getRedirect_home();
+            }
+            StringBuilder str = new StringBuilder();
+            str.append("Form Data:");
+            for (String key : params.keySet()) {
+                String[] values = params.get(key);
+                for (int i = 0; i < values.length; i++) {
+                    String value = values[i];
+                    str.append("<br/>" + key + "=" + value);
+                }
+            }
+            Set<String> keySet = params.keySet();
+            List<String> keyList = new ArrayList<String>(keySet);
+            Collections.sort(keyList);
+            StringBuffer mdStr = new StringBuffer();
+            for (String key : keyList) {
+                String value = params.get(key)[0];
+                if (!key.equals("verify_sign") && params.get(key) != null && value != null && !value.equals("null")) {
+                    mdStr.append(key + "=" + value + "&");
+                }
+            }
+            logger.info("sign prams string:" + mdStr.toString());
+            String token = nihaopayConfig.getGatewayToken();
+            mdStr.append(SecurityUtils.MD5(token).toLowerCase());
+            logger.info("prams and token sign string:" + mdStr.toString());
+            String verify_sign = params.get("verify_sign")[0];
+            String sign = SecurityUtils.MD5(mdStr.toString()).toLowerCase();
+            logger.info("sign string:" + sign);
+            logger.info("verify_sign string:" + verify_sign);
+            if (!sign.equals(verify_sign)) {
+                return "redirect:/"+this.nihaopayConfig.getRedirect_home();
+            }
+            logger.info("Callback " + str.toString());
+            String reference = params.get("reference")[0];
+            String orderSn = reference.replace("alipay_", "");
+            orderSn = orderSn.replace("wechatpay_", "");
+            orderSn = orderSn.replace("unionpay_", "");
+            orderSn = orderSn.replace("PayPal_", "");
+            //查询订单状态
+            String url = this.nihaopayConfig.getMerchantUrl()+reference;
+            String result = HttpRequestUtil.sendAuthGet(url, "", "Bearer " + token);
+            JSONObject obj = JSONUtil.parseObj(result);
+            return "redirect:"+this.nihaopayConfig.getRedirect_payResult()+"?tradeStatus="+obj.getStr("status");
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+            return "redirect:/"+this.nihaopayConfig.getRedirect_home();
+        }
+    }
+
     @RequestMapping(value = "/callback")
-    public String callback(HttpServletRequest request) {
+    private String callback(HttpServletRequest request) {
         try {
             logger.info("callback request:");
             logger.info(getClientInfo(request));
@@ -154,7 +212,7 @@ public class NihaopayController {
             orderSn = orderSn.replace("wechatpay_", "");
             orderSn = orderSn.replace("unionpay_", "");
             orderSn = orderSn.replace("PayPal_", "");
-            return "redirect:/"+this.nihaopayConfig.getCallback_url()+"?out_trade_no="+orderSn;
+            return "redirect:"+this.nihaopayConfig.getCallback_url()+"?out_trade_no="+orderSn;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage(), e);
@@ -226,7 +284,7 @@ public class NihaopayController {
         }
     }
 
-    public static String getClientInfo(HttpServletRequest request) {
+    private static String getClientInfo(HttpServletRequest request) {
         StringBuilder str = new StringBuilder();
         str.append("\r\n ----------New Request---------------");
         str.append("\r\n RequestURL:" + request.getRequestURL());

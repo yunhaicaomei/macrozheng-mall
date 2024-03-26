@@ -52,6 +52,9 @@ alipay:
 
 nihaopay:
   gatewayUrl: https://apitest.nihaopay.com/v1.2/transactions/securepay
+  merchantUrl: https://apitest.nihaopay.com/v1.2/transactions/merchant/
   gatewayToken: 6c4dc4828474fa73c5f438a9eb2fbf3092e441d9f2ea5fbcf93b51a232ddc249
   ipn_url: http://218.90.154.14:14019/nihaopay/nihaopayNotify
-  callback_url: http://218.90.154.14:14018/#/pages/money/paySuccess
+  callback_url: http://218.90.154.14:14019/nihaopay/nihaopayCallback
+  redirect_home: http://218.90.154.14:14018/#/
+  redirect_payResult: http://218.90.154.14:14018/#/pages/money/paySuccess

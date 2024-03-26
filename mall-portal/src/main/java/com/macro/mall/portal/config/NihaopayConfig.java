@@ -21,6 +21,11 @@ public class NihaopayConfig {
      */
     private String gatewayUrl;
     /**
+     * 查询订单状态
+     * https://api.nihaopay.com/v1.2/transactions/merchant/{reference}
+     */
+    private String merchantUrl;
+    /**
      * 设置Bearer 加API Token 作为认证方式
      */
     private String gatewayToken;
@@ -32,4 +37,9 @@ public class NihaopayConfig {
      * 支付成功后浏览器返回商户网站的URL
      */
     private String callback_url;
+    /**
+     * 商户网站的主页
+     */
+    private String redirect_home;
+    private String redirect_payResult;
 }
